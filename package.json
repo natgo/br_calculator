@@ -1,0 +1,18 @@
+{
+  "name": "wty",
+  "version": "1.0.0",
+  "main": "main.js",
+  "dependencies": {
+    "csv-parse": "^5.0.4",
+    "ocr-space-api-wrapper": "^2.1.1",
+    "prettier": "^2.6.2",
+    "tesseract.js": "^2.1.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.23",
+    "typescript": "^4.6.3"
+  }
+}
