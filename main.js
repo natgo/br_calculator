@@ -92,12 +92,19 @@ function main() {
                     aray = res1.ParsedResults[0].ParsedText.split("\n");
                     console.log(aray);
                     result_1 = [];
-                    aray.forEach(function (element) {
-                        console.log(element.replace(/\s/g, "_"));
-                        console.log(element);
+                    aray.forEach(function (ele) {
+                        var element = ele.replace(/\s/g, "_");
                         if (element == "Spitfire_Mk_la") {
-                            console.log("spitit");
                             element = "Spitfire_Mk_Ia";
+                        }
+                        if (element == "*P-63A-5") {
+                            element = "P-63A-5_(USSR)";
+                        }
+                        if (element == "Ki-44-1") {
+                            element = "Ki-44-I";
+                        }
+                        if (element == "LBf_109_E-7") {
+                            element = "Bf_109_E-7_(Japan)";
                         }
                         if (element[element.length - 1] == ".") {
                             console.log(element);

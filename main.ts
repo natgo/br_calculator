@@ -52,12 +52,19 @@ async function main() {
     let aray = res1.ParsedResults[0].ParsedText.split("\n");
     console.log(aray);
     let result = [];
-    aray.forEach((element: string) => {
-      console.log(element.replace(/\s/g,"_"));
-      console.log(element);
+    aray.forEach((ele: string) => {
+      let element = ele.replace(/\s/g,"_");
       if (element == "Spitfire_Mk_la") {
-        console.log("spitit");
         element = "Spitfire_Mk_Ia";
+      }
+      if (element == "*P-63A-5") {
+        element = "P-63A-5_(USSR)";
+      }
+      if (element == "Ki-44-1") {
+        element = "Ki-44-I";
+      }
+      if (element == "LBf_109_E-7") {
+        element = "Bf_109_E-7_(Japan)";
       }
       if (element[element.length - 1] == ".") {
         console.log(element);
