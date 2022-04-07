@@ -26,7 +26,7 @@ async function main(): Promise<void> {
   function csvJSON(csv: string) {
     const lines = csv.split("\n");
 
-    const result: { name: string; rb_br: number; cls: string; }[] = [];
+    const result: { name: string; rb_br: number; cls: string }[] = [];
 
     const headers = lines[0].split(",");
 
@@ -35,7 +35,7 @@ async function main(): Promise<void> {
       const obj: any = {
         name: "",
         rb_br: 0,
-        cls: ""
+        cls: "",
       };
       const currentline = lines[i].split(",");
 
@@ -56,7 +56,7 @@ async function main(): Promise<void> {
   }
   const sel = ress.filter(filterhighbr);
   async function filterhighbr(vehicle: { rb_br: number }) {
-    return vehicle.rb_br <= await brb;
+    return vehicle.rb_br <= (await brb);
   }
   try {
     console.log("querying");
@@ -64,8 +64,8 @@ async function main(): Promise<void> {
     console.log(res1);
     const aray = res1.ParsedResults[0].ParsedText.split("\n");
     console.log(aray);
-    let inter: { name: string; br: number; }[] = [];
-    const result: { name: string; br: number; }[] = [];
+    let inter: { name: string; br: number }[] = [];
+    const result: { name: string; br: number }[] = [];
     aray.forEach((ele: string) => {
       let element = ele.replace(/\s/g, "_");
       if (element == "Spitfire_Mk_la") {
