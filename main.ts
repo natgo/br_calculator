@@ -45,19 +45,23 @@ async function main(): Promise<void> {
 
       result.push(obj);
     }
-
     //return result; //JavaScript object
     return result; //JSON
   }
   const arr = csvJSON(file);
+
   const ress = arr.filter(air);
+  
   function air(vehicle: { cls: string }) {
     return vehicle.cls === "Aviation";
   }
+  
   const sel = ress.filter(filterhighbr);
+  
   async function filterhighbr(vehicle: { rb_br: number }) {
     return vehicle.rb_br <= (await brb);
   }
+  
   try {
     console.log("querying");
     const res1 = await ocrSpace("ss.png", { OCREngine: 2 });
