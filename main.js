@@ -60,12 +60,19 @@ function main() {
             return vehicle.cls === "Aviation";
         }
         function filterhighbr(vehicle) {
-            return vehicle.rb_br <= 3.3;
+            //axios
+            //.get('http://localhost:8111/indicators')
+            //.then(res => {
+            //  console.log(`statusCode: ${res.status}`)
+            //  console.log(res)
+            //})
+            //.catch(error => {
+            //  console.error(error)
+            //})
+            //console.log(res);
+            return vehicle.rb_br <= 3.7;
         }
-        function filterlowbr(vehicle) {
-            return vehicle.rb_br >= 2.3;
-        }
-        var file, contents, arr, res, sel, set, res1, aray, result_1, error_1;
+        var file, contents, arr, ress, sel, res1, aray, inter_1, result_1, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -78,9 +85,8 @@ function main() {
                         console.log(err);
                     }
                     arr = csvJSON(contents);
-                    res = arr.filter(air);
-                    sel = res.filter(filterhighbr);
-                    set = sel.filter(filterlowbr);
+                    ress = arr.filter(air);
+                    sel = ress.filter(filterhighbr);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -91,14 +97,15 @@ function main() {
                     console.log(res1);
                     aray = res1.ParsedResults[0].ParsedText.split("\n");
                     console.log(aray);
+                    inter_1 = [];
                     result_1 = [];
                     aray.forEach(function (ele) {
                         var element = ele.replace(/\s/g, "_");
                         if (element == "Spitfire_Mk_la") {
                             element = "Spitfire_Mk_Ia";
                         }
-                        if (element == "*P-63A-5") {
-                            element = "P-63A-5_(USSR)";
+                        if (element[0] == "*") {
+                            element = element.substring(1, element.length) + "_(USSR)";
                         }
                         if (element == "Ki-44-1") {
                             element = "Ki-44-I";
@@ -108,10 +115,34 @@ function main() {
                         }
                         if (element[element.length - 1] == ".") {
                             console.log(element);
+                            element = element.substring(0, element.length - 2);
+                            for (var index = 0; index < sel.length; index++) {
+                                var ement = sel[index];
+                                if (ement.name.search(element) === 0) {
+                                    if (ement.name[ement.name.length - 1] === ")") {
+                                        console.log("keikattu");
+                                    }
+                                    else {
+                                        var object = {
+                                            name: ement.name,
+                                            br: ement.rb_br
+                                        };
+                                        inter_1.push(object);
+                                    }
+                                }
+                            }
+                            inter_1.sort(function (a, b) {
+                                var y = a.br;
+                                var x = b.br;
+                                return y - x;
+                            });
+                            console.log(inter_1);
+                            result_1.push(inter_1[0]);
+                            inter_1 = [];
                         }
                         else {
-                            for (var index = 0; index < set.length; index++) {
-                                var elemen = set[index];
+                            for (var index = 0; index < sel.length; index++) {
+                                var elemen = sel[index];
                                 if (elemen.name == element) {
                                     var object = {
                                         name: elemen.name,

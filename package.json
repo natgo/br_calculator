@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "main.js",
   "dependencies": {
+    "axios": "^0.26.1",
     "csv-parse": "^5.0.4",
     "ocr-space-api-wrapper": "^2.1.1",
     "prettier": "^2.6.2",
