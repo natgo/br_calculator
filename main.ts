@@ -8,7 +8,7 @@ async function getBR() {
   try {
     const response = await axios.get("http://localhost:8111/indicators");
     console.log(response);
-    return response;
+    return 2.7;
   } catch (error) {
     let input = "";
     while (input.search(/\d{1,2}\.0|\d{1,2}\.3|\d{1,2}\.7/g)) {
@@ -18,11 +18,10 @@ async function getBR() {
     return output;
   }
 }
-const brb = getBR();
 
 async function main(): Promise<void> {
   const file = readFileSync("./wk2022-03-30.csv", "utf-8");
-  
+
   function csvJSON(csv: string) {
     const lines = csv.split("\n");
 
@@ -45,27 +44,22 @@ async function main(): Promise<void> {
 
       result.push(obj);
     }
-    //return result; //JavaScript object
-    return result; //JSON
+    return result;
   }
   const arr = csvJSON(file);
 
   const ress = arr.filter(air);
-  
-  function air(vehicle: { cls: string }) {
+
+  function air(vehicle: { cls: string }): boolean {
     return vehicle.cls === "Aviation";
   }
-  
+  const brb: number = await getBR();
   const sel = ress.filter(filterhighbr);
-  
-  async function filterhighbr(vehicle: { rb_br: number }) {
-    return vehicle.rb_br <= (await brb);
+  function filterhighbr(vehicle: { rb_br: number }) {
+    return vehicle.rb_br <= brb + 1;
   }
-  
   try {
-    console.log("querying");
     const res1 = await ocrSpace("ss.png", { OCREngine: 2 });
-    console.log(res1);
     const aray = res1.ParsedResults[0].ParsedText.split("\n");
     console.log(aray);
     let inter: { name: string; br: number }[] = [];
@@ -91,7 +85,7 @@ async function main(): Promise<void> {
           const ement = sel[index];
           if (ement.name.search(element) === 0) {
             if (ement.name[ement.name.length - 1] === ")") {
-              console.log("keikattu");
+              // empty
             } else {
               const object = {
                 name: ement.name,
@@ -101,11 +95,7 @@ async function main(): Promise<void> {
             }
           }
         }
-        inter.sort(function (a, b) {
-          const y = a.br;
-          const x = b.br;
-          return y - x;
-        });
+        inter.sort((a, b) => a.br - b.br);
         console.log(inter);
         result.push(inter[0]);
         inter = [];
@@ -122,11 +112,7 @@ async function main(): Promise<void> {
         }
       }
     });
-    result.sort(function (a, b) {
-      const y = a.br;
-      const x = b.br;
-      return x - y;
-    });
+    result.sort((a, b) => b.br - a.br);
     console.log(result);
   } catch (error) {
     console.error(error);
