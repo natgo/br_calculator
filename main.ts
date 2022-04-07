@@ -22,7 +22,7 @@ const brb = getBR();
 
 async function main(): Promise<void> {
   const file = readFileSync("./wk2022-03-30.csv", "utf-8");
-  //var csv is the CSV file with headers
+  
   function csvJSON(csv: string) {
     const lines = csv.split("\n");
 
