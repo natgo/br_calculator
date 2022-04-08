@@ -1,14 +1,33 @@
 import axios from "axios";
 import { readFileSync } from "fs";
 import { ocrSpace } from "ocr-space-api-wrapper";
+import lookup from "./lookup";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const prompt = require("prompt-sync")();
 
-async function getBR() {
+async function getBR(ress: { name: string; rb_br: number; cls: string }[]) {
   try {
     const response = await axios.get("http://localhost:8111/indicators");
-    console.log(response);
-    return 2.7;
+    console.log(response.data.type);
+    if (response.data.type === "he-177a-5") {
+      return 6.0;
+    }
+    if (response.data.type === "z_1007_bis_serie3") {
+      return 2.7;
+    }
+    if (response.data.type === "z_1007_bis_serie5") {
+      return 3.0;
+    }
+    if (response.data.type === "b-17e") {
+      return 4.7;
+    }
+    if (response.data.type === "leo_451_early") {
+      return 3.0;
+    }
+    if (response.data.type === "mb_175t") {
+      return 3.3;
+    }
+    return 4.7;
   } catch (error) {
     let input = "";
     while (input.search(/\d{1,2}\.0|\d{1,2}\.3|\d{1,2}\.7/g)) {
@@ -53,7 +72,7 @@ async function main(): Promise<void> {
   function air(vehicle: { cls: string }): boolean {
     return vehicle.cls === "Aviation";
   }
-  const brb: number = await getBR();
+  const brb: number = await getBR(ress);
   const sel = ress.filter(filterhighbr);
   function filterhighbr(vehicle: { rb_br: number }) {
     return vehicle.rb_br <= brb + 1;
@@ -66,19 +85,11 @@ async function main(): Promise<void> {
     const result: { name: string; br: number }[] = [];
     aray.forEach((ele: string) => {
       let element = ele.replace(/\s/g, "_");
-      if (element == "Spitfire_Mk_la") {
-        element = "Spitfire_Mk_Ia";
-      }
-      if (element[0] == "*") {
-        element = element.substring(1, element.length) + "_(USSR)";
-      }
-      if (element == "Ki-44-1") {
-        element = "Ki-44-I";
-      }
-      if (element == "LBf_109_E-7") {
-        element = "Bf_109_E-7_(Japan)";
-      }
-      if (element[element.length - 1] == ".") {
+      element = lookup(element);
+      if (
+        element[element.length - 2] == "." &&
+        element[element.length - 1] == "."
+      ) {
         console.log(element);
         element = element.substring(0, element.length - 2);
         for (let index = 0; index < sel.length; index++) {
