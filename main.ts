@@ -5,7 +5,7 @@ import lookup from "./lookup";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const prompt = require("prompt-sync")();
 
-async function getBR(ress: { name: string; rb_br: number; cls: string }[]) {
+async function getBR() {
   try {
     const response = await axios.get("http://localhost:8111/indicators");
     console.log(response.data.type);
@@ -72,7 +72,7 @@ async function main(): Promise<void> {
   function air(vehicle: { cls: string }): boolean {
     return vehicle.cls === "Aviation";
   }
-  const brb: number = await getBR(ress);
+  const brb: number = await getBR();
   const sel = ress.filter(filterhighbr);
   function filterhighbr(vehicle: { rb_br: number }) {
     return vehicle.rb_br <= brb + 1;
