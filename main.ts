@@ -1,6 +1,7 @@
 import axios from "axios";
 import { readFileSync } from "fs";
 import { ocrSpace } from "ocr-space-api-wrapper";
+import br from "./br";
 import lookup from "./lookup";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const prompt = require("prompt-sync")();
@@ -9,25 +10,8 @@ async function getBR() {
   try {
     const response = await axios.get("http://localhost:8111/indicators");
     console.log(response.data.type);
-    if (response.data.type === "he-177a-5") {
-      return 6.0;
-    }
-    if (response.data.type === "z_1007_bis_serie3") {
-      return 2.7;
-    }
-    if (response.data.type === "z_1007_bis_serie5") {
-      return 3.0;
-    }
-    if (response.data.type === "b-17e") {
-      return 4.7;
-    }
-    if (response.data.type === "leo_451_early") {
-      return 3.0;
-    }
-    if (response.data.type === "mb_175t") {
-      return 3.3;
-    }
-    return 4.7;
+    const bb = br(response.data.type);
+    return bb;
   } catch (error) {
     let input = "";
     while (input.search(/\d{1,2}\.0|\d{1,2}\.3|\d{1,2}\.7/g)) {

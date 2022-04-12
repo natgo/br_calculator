@@ -129,3 +129,4 @@ dist
 #compiled typescript
 main.js
 lookup.js
+br.js
